@@ -37,9 +37,6 @@ articleView.handleAuthorFilter = function() {
     //         defining. "$(this)" is using jQuery to select that element, so we can chain jQuery methods
     //         onto it.
     if ($(this).val()) {
-      // TODO: If the select box was changed to an option that has a value, we need to hide all the articles,
-      //       and then show just the ones that match for the author that was selected.
-      //       Use an "attribute selector" to find those articles, and fade them in for the reader.
 
       var $selection = $(this).val();
       $('article').hide();
@@ -84,9 +81,11 @@ articleView.handleMainNav = function() {
   //       single .tab-content section that is associated with the clicked .tab element.
   //       So: You need to dynamically build a selector string with the correct ID, based on the
   //       data available to you on the .tab element that was clicked.
-
-
-
+  $('li.tab').on('click', function() {
+    var $whereToGo = $(this).data('content');
+    $('.tab-content').hide();
+    $('#' + $whereToGo).fadeIn(500);
+  })
 
   $('.main-nav .tab:first').click(); // Let's now trigger a click on the first .tab element, to set up the page.
 };
@@ -99,9 +98,20 @@ articleView.setTeasers = function() {
   //       "Read On" link once it has been clicked. Be sure to prevent the default link-click action!
   //       Ideally, we'd attach this as just 1 event handler on the #articles section, and let it
   //       process any .read-on clicks that happen within child nodes.
+  $('.read-on').on('click', function(e) {
+    e.preventDefault();
+    $(this).siblings('.article-body').children().show();
+    $(this).removeClass('read-on').addClass('show-less').html(' Show less');
+    console.log($(this));
+  });
 
   // STRETCH GOAl!: change the 'Read On' link to 'Show Less'
-
+  $('.show-less').on('click', function(e) {
+    e.preventDefault();
+    // couldn't quite get this to work properly
+    //$(this).siblings('.article-body *:nth-of-type(n+2)').hide();
+    $(this).removeClass('show-less').addClass('read-on').html(' Read on');
+  })
 };
 
 // TODO: Call all of the above functions, once we are sure the DOM is ready.
@@ -112,5 +122,4 @@ $(document).ready(function() {
   articleView.handleCategoryFilter();
   articleView.handleMainNav();
   articleView.setTeasers();
-
 })
