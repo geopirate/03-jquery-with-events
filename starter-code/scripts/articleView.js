@@ -98,25 +98,22 @@ articleView.setTeasers = function() {
   //       "Read On" link once it has been clicked. Be sure to prevent the default link-click action!
   //       Ideally, we'd attach this as just 1 event handler on the #articles section, and let it
   //       process any .read-on clicks that happen within child nodes.
-  $('.read-on').on('click', function(e) {
+  $('a').on('click', function(e) {
     e.preventDefault();
-    $(this).siblings('.article-body').children().show();
-    $(this).removeClass('read-on').addClass('show-less').html(' Show less');
-    console.log($(this));
+    if( $(this).hasClass('read-on') ) {
+      $('.read-on').siblings('.article-body').children().show();
+      $(this).removeClass('read-on').addClass('read-off').html('Show Less');
+    } else {
+      // STRETCH GOAl!: change the 'Read On' link to 'Show Less'
+      $('.article-body *:nth-of-type(n+2)').hide();
+      $(this).removeClass('read-off').addClass('read-on').html('Read on');
+    }
   });
 
-  // STRETCH GOAl!: change the 'Read On' link to 'Show Less'
-  $('.show-less').on('click', function(e) {
-    e.preventDefault();
-    // couldn't quite get this to work properly
-    //$(this).siblings('.article-body *:nth-of-type(n+2)').hide();
-    $(this).removeClass('show-less').addClass('read-on').html(' Read on');
-  })
 };
 
 // TODO: Call all of the above functions, once we are sure the DOM is ready.
 $(document).ready(function() {
-  // $('article').hide();
   articleView.populateFilters();
   articleView.handleAuthorFilter();
   articleView.handleCategoryFilter();
